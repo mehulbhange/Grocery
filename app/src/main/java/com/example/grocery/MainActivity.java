@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -20,7 +21,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i_login);
                 finish();
             }
-        },3000);
+        },1000);
+
+        */
+
+
+      //  Redirect to the home page without login
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i_login = new Intent(MainActivity.this,Home.class);
+                startActivity(i_login);
+                finish();
+            }
+        },1000);
+
+
 
     }
 }

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/home_fragment"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#43CDC1"
+            android:padding="5dp"
+            android:text="Shop By Categories"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_fruits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fruits_vegetables"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/btn_beverages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BEVERAGES"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/btn_oils"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/foodgrains_oils"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/btn_dairy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DAIRY PRODUCTS"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/btn_beauty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/beauty_hygiene"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/btn_cleaning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cleaaning_household"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/btn_personal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PERSONAL CARE"
+            android:textSize="20sp"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

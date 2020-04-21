@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tv_logout"
         android:layout_width="101dp"
         android:layout_height="31dp"
         android:layout_marginTop="216dp"

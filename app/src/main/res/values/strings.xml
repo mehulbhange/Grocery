@@ -97,5 +97,9 @@
     <string name="foodgrains_oils"><![CDATA[FOODGRAINS & OILS]]></string>
     <string name="beauty_hygiene"><![CDATA[BEAUTY & HYGIENE]]></string>
     <string name="cleaaning_household"><![CDATA[CLEAANING & HOUSEHOLD]]></string>
+    <string name="registration_success">Registration Success</string>
+    <string name="registration_fail">Something went wrong</string>
+
+    <string name="user_name">User name</string>
 
 </resources>

@@ -4,7 +4,7 @@
     tools:showIn="navigation_view">
 
 
-    <item android:title="Categories">
+    <item android:title="GROCERY">
         <menu>
             <item
                 android:title="Home"
@@ -12,7 +12,11 @@
             <item android:title="Profile"
                 android:id="@+id/profile"/>
             <item android:id="@+id/notification"
-                android:title="Notification" />
+                android:title="Notifications" />
+            <item android:id="@+id/myCart"
+                android:title="My Cart" />
+            <item android:id="@+id/myOrder"
+                android:title="My Orders" />
 
         </menu>
     </item>

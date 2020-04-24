@@ -100,4 +100,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_address" />
 
+    <TextView
+        android:id="@+id/tv_login"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="32dp"
+        android:text="Already have account?"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_login_page"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signup" />
+
+    <TextView
+        android:id="@+id/tv_login_page"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="32dp"
+        android:clickable="true"
+        android:onClick="onClickLogin"
+        android:paddingLeft="2dp"
+        android:text="Login"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signup" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

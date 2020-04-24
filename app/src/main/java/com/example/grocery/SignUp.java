@@ -109,31 +109,11 @@ public class SignUp extends AppCompatActivity {
                                 databaseReference.child("Contact").setValue(phone);
 
 
-                                /*
-                                FirebaseDatabase.getInstance().getReference("userData")
-                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .setValue(name).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(SignUp.this, "Registration Success.",
-                                                    LENGTH_LONG).show();
-                                        } else {
-                                            Toast.makeText(SignUp.this, "Something went wrong.",
-                                                    LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-
-                                 */
-
-
                                 // Sign in success, update UI with the signed-in user's information
 
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(SignUp.this, "Authentication failed.",
+                                Toast.makeText(SignUp.this, "Something went wrong.",
                                         LENGTH_LONG).show();
                             }
                         }
@@ -145,4 +125,8 @@ public class SignUp extends AppCompatActivity {
 
     }
 
+    public void onClickLogin(View view) {
+        startActivity(new Intent(SignUp.this,Login.class));
+        finish();
+    }
 }

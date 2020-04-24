@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
+import android.app.FragmentManager;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -49,6 +51,7 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
     private TextView tv_name;
     private TextView tv_usermail;
     private ImageView iv_userimage;
+    private ImageView iv_profileimage;
 
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -99,7 +102,7 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(Home.this, "Data Received: ", Toast.LENGTH_LONG).show();
+                Toast.makeText(Home.this, "Operation cancelled:", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -167,16 +170,22 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
             public void onSuccess(Uri uri) {
                 Picasso.with(Home.this).load(uri).into(iv_userimage);
             }
-        });
 
+        });
 
     }
 
     @Override
     public void onBackPressed() {
+
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        }else{
+        }
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(currentFragment instanceof HomeFragment){
+            finish();
+        }
+        else{
             super.onBackPressed();
         }
     }
@@ -188,11 +197,21 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
 
         switch (menuItem.getItemId()){
             case R.id.home:
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if(currentFragment instanceof HomeFragment){
+                    break;
+                }
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new HomeFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.profile:
+                Fragment currentFragmentprofile = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if(currentFragmentprofile instanceof ProfileFragment){
+                    break;
+                }
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ProfileFragment()).addToBackStack(null).commit();
 
@@ -200,14 +219,27 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
                 break;
 
             case R.id.notification:
+                Fragment currentFragmentNotification = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if(currentFragmentNotification instanceof NotificationFragment){
+                    break;
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new NotificationFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.myCart:
+                Fragment currentFragmentMyCart = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if(currentFragmentMyCart instanceof MyCartFragment){
+                    break;
+                }
+
                 break;
 
             case R.id.myOrder:
+                Fragment currentFragmentMyOrder = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if(currentFragmentMyOrder instanceof OrdersFragment){
+                    break;
+                }
                 break;
 
             case R.id.logout:

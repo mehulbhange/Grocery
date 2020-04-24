@@ -2,8 +2,16 @@ package com.example.grocery;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +19,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -40,7 +49,10 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
@@ -50,15 +62,18 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference databaseReference;
-    EditText et_name;
-    EditText et_email;
-    EditText et_address;
-    EditText et_contact;
+
+    TextView tv_name;
+    TextView tv_email;
+    TextView tv_address;
+    TextView tv_contact;
+
     Button btn_update;
     Button btn_back;
     ImageView iv_profileimage;
     ImageView iv_userimage;
     private static final int PICK_IMAGE_RUQUEST = 1;
+    Bitmap mBitmap;
 
     private Uri mImageUri;
     private StorageReference storageReference;
@@ -71,34 +86,21 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        et_email= (EditText) view.findViewById(R.id.et_email);
-        et_address = (EditText) view.findViewById(R.id.et_address);
-        et_contact = (EditText) view.findViewById(R.id.et_contact);
-        et_name = (EditText) view.findViewById(R.id.et_name);
+        tv_email= (TextView) view.findViewById(R.id.tv_email);
+        tv_address = (TextView) view.findViewById(R.id.tv_address);
+        tv_contact = (TextView) view.findViewById(R.id.tv_contact);
+        tv_name = (TextView) view.findViewById(R.id.tv_name);
         btn_update = (Button) view.findViewById(R.id.btn_update);
         btn_back = (Button) view.findViewById(R.id.btn_back);
         navigationView = (NavigationView) view.findViewById(R.id.nav_view);
         iv_profileimage = (ImageView) view.findViewById(R.id.iv_profileimage);
-        iv_userimage = (ImageView) view.findViewById(R.id.iv_userimage);
+        System.out.println(iv_profileimage);
+        iv_userimage = (ImageView)getActivity().findViewById(R.id.iv_userimage);
+        System.out.println(iv_userimage);
+
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        iv_profileimage.setClickable(false);
-
-        et_name.setFocusable(false);
-        et_address.setFocusable(false);
-        et_email.setFocusable(false);
-        et_contact.setFocusable(false);
-
-        return view;
-    }
-
-
-
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mFirebaseDatabase =FirebaseDatabase.getInstance();
 
         //Set Image to Profile
 
@@ -111,6 +113,15 @@ public class ProfileFragment extends Fragment {
         });
 
 
+        return view;
+    }
+
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mFirebaseDatabase =FirebaseDatabase.getInstance();
 
         // Name
         databaseReference = mFirebaseDatabase.getReference("userData/"+ FirebaseAuth.getInstance().getCurrentUser().getUid()+"/Name");
@@ -119,7 +130,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Getting the string value of that node
                 String name =  dataSnapshot.getValue(String.class);
-                et_name.setText(name);
+                tv_name.setText(name);
             }
 
             @Override
@@ -134,7 +145,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Getting the string value of that node
                 String email =  dataSnapshot.getValue(String.class);
-                et_email.setText(email);
+                tv_email.setText(email);
             }
 
             @Override
@@ -149,7 +160,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Getting the string value of that node
                 String address =  dataSnapshot.getValue(String.class);
-                et_address.setText(address);
+                tv_address.setText(address);
             }
 
             @Override
@@ -165,7 +176,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Getting the string value of that node
                 String contact =  dataSnapshot.getValue(String.class);
-                et_contact.setText(contact);
+                tv_contact.setText(contact);
             }
 
             @Override
@@ -183,40 +194,17 @@ public class ProfileFragment extends Fragment {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                iv_profileimage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openFileChooser();
-                    }
-                });
-
-
-                btn_back.setText("Cancel");
-                btn_update.setText("Save");
-                btn_update.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                       StorageReference mRef = storageReference.child("UserImages/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"."+getFileExtension(mImageUri));
-
-                       mRef.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                           @Override
-                           public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                               Toast.makeText(getActivity(), "Image upload success ", Toast.LENGTH_LONG).show();
-
-                           }
-                       }).addOnFailureListener(new OnFailureListener() {
-                           @Override
-                           public void onFailure(@NonNull Exception e) {
-
-                           }
-                       });
-                    }
-                });
-
+                startActivity(new Intent(getActivity(),UpdateProfile.class));
             }
         });
 
+        iv_profileimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+
+            }
+        });
 
 
     }
@@ -234,15 +222,42 @@ public class ProfileFragment extends Fragment {
 
         if(requestCode == PICK_IMAGE_RUQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
             mImageUri = data.getData();
+            try {
+                mBitmap = MediaStore.Images.Media.getBitmap( getActivity().getContentResolver() , mImageUri) ;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             iv_profileimage.setImageURI(mImageUri);
+
+            StorageReference mRef = storageReference.child("UserImages/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"."+getFileExtension(mImageUri));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            byte[] bytedata = baos.toByteArray();
+
+            UploadTask uploadTask = mRef.putBytes(bytedata);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getActivity(), "Image upload success ", Toast.LENGTH_LONG).show();
+                    Picasso.with(getActivity()).load(mImageUri).into(iv_userimage);
+                }
+            });
+
         }
     }
+
 
     public String getFileExtension(Uri uri){
         ContentResolver cR = getActivity().getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
+
 
 }
 

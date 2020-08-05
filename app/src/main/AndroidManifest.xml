@@ -14,7 +14,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UpdateProfile"></activity>
+        <activity android:name=".BathingEssentials"></activity>
+        <activity android:name=".DetergentPowder" />
+        <activity android:name=".OralCare" />
+        <activity android:name=".ColdDrinks" />
+        <activity android:name=".BiscuitsAndCookies" />
+        <activity android:name=".Juices" />
+        <activity android:name=".Vegetables" />
+        <activity android:name=".MyCart" />
+        <activity android:name=".Fruits" />
+        <activity android:name=".UpdateProfile" />
         <activity android:name=".SignUp" />
         <activity android:name=".Home" />
         <activity android:name=".Login" />

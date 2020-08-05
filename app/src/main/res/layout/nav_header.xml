@@ -27,7 +27,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menu_icon" />
+            app:srcCompat="@drawable/user_image" />
 
     </androidx.cardview.widget.CardView>
 

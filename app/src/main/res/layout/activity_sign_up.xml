@@ -7,6 +7,7 @@
     android:isScrollContainer="true"
     android:overScrollMode="ifContentScrolls"
     android:scrollbars="vertical"
+    android:orientation="vertical"
     tools:context=".SignUp">
 
     <EditText
@@ -125,5 +126,7 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_signup" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -113,7 +113,7 @@ public class SignUp extends AppCompatActivity {
 
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(SignUp.this, "Something went wrong.",
+                                Toast.makeText(SignUp.this, "Email already registered.",
                                         LENGTH_LONG).show();
                             }
                         }

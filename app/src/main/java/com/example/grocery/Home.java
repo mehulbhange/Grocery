@@ -10,17 +10,26 @@ import androidx.fragment.app.Fragment;
 
 import android.app.FragmentManager;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,115 +72,115 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
     private Uri mImageUri;
     private ProgressBar mProgressBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
 
-        //To upload the user Profile picture to the Database
 
-        storageReference = FirebaseStorage.getInstance().getReference("UserImages");
-        databaseReference = FirebaseDatabase.getInstance().getReference("userData");
+            //To upload the user Profile picture to the Database
 
-        //------------------------------------------------------------------
+            storageReference = FirebaseStorage.getInstance().getReference("UserImages");
+            databaseReference = FirebaseDatabase.getInstance().getReference("userData");
 
-        // TO get the username of the user from the database and set it to profile
+            //------------------------------------------------------------------
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        tv_name = (TextView) headerView.findViewById(R.id.tv_username);
-        tv_usermail = (TextView) headerView.findViewById(R.id.tv_usermail);
-        iv_userimage =(ImageView) headerView.findViewById(R.id.iv_userimage);
+            // TO get the username of the user from the database and set it to profile
 
-        storageReference = FirebaseStorage.getInstance().getReference();
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View headerView = navigationView.getHeaderView(0);
+            tv_name = (TextView) headerView.findViewById(R.id.tv_username);
+            tv_usermail = (TextView) headerView.findViewById(R.id.tv_usermail);
+            iv_userimage = (ImageView) headerView.findViewById(R.id.iv_userimage);
+
+            storageReference = FirebaseStorage.getInstance().getReference();
+
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReference = mFirebaseDatabase.getReference("userData/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/Name");
+
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //Getting the string value of that node
+                    String value = dataSnapshot.getValue(String.class);
+                    tv_name.setText(value);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(Home.this, "Operation cancelled:", Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+            databaseReference = mFirebaseDatabase.getReference("userData/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/Email");
+
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //Getting the string value of that node
+                    String value = dataSnapshot.getValue(String.class);
+                    tv_usermail.setText(value);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(Home.this, "Operation cancelled: ", Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+            //-------------------------------------------------------------
 
 
+            mToolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(mToolbar);
 
+            mDrawerLayout = findViewById(R.id.drawer_layout);
+            actionBarDrawerToggle = new ActionBarDrawerToggle(
+                    this,
+                    mDrawerLayout,
+                    mToolbar,
+                    R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close
+            );
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = mFirebaseDatabase.getReference("userData/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/Name");
+            mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+            actionBarDrawerToggle.syncState();
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Getting the string value of that node
-                String value =  dataSnapshot.getValue(String.class);
-                tv_name.setText(value);
+            navigationView = findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+
+            //OnClickCart Button
+
+            ImageView iv_cart = (ImageView) findViewById(R.id.open_cart);
+            iv_cart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(Home.this, MyCart.class));
+                }
+            });
+
+            //to check if home page is empty load the home page
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HomeFragment()).addToBackStack(null).commit();
+                navigationView.setCheckedItem(R.id.home_fragment);
+
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(Home.this, "Operation cancelled:", Toast.LENGTH_LONG).show();
+            StorageReference mRef = storageReference.child("UserImages/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
+            mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.with(Home.this).load(uri).into(iv_userimage);
+                }
 
-            }
-        });
-
-        databaseReference = mFirebaseDatabase.getReference("userData/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/Email");
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Getting the string value of that node
-                String value =  dataSnapshot.getValue(String.class);
-                tv_usermail.setText(value);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(Home.this, "Operation cancelled: ", Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-        //-------------------------------------------------------------
+            });
 
 
-
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                mDrawerLayout,
-                mToolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-        );
-
-        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
-
-        //OnClickCart Button
-
-        ImageView iv_cart = (ImageView)findViewById(R.id.open_cart);
-        iv_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Cart icon clicked Successfully");
-            }
-        });
-
-        //to check if home page is empty load the home page
-        if(savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeFragment()).addToBackStack(null).commit();
-            navigationView.setCheckedItem(R.id.home_fragment);
-
-        }
-
-        StorageReference mRef = storageReference.child("UserImages/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+".jpg");
-        mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.with(Home.this).load(uri).into(iv_userimage);
-            }
-
-        });
 
     }
 
@@ -190,69 +199,79 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
         }
     }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    protected void onStop() {
+        super.onStop();
+    }
 
-        switch (menuItem.getItemId()){
-            case R.id.home:
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if(currentFragment instanceof HomeFragment){
+    @Override
+public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+            switch (menuItem.getItemId()) {
+                case R.id.home:
+                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (currentFragment instanceof HomeFragment) {
+                        break;
+                    }
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new HomeFragment()).addToBackStack(null).commit();
                     break;
-                }
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new HomeFragment()).addToBackStack(null).commit();
-                break;
+                case R.id.profile:
+                    Fragment currentFragmentprofile = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (currentFragmentprofile instanceof ProfileFragment) {
+                        break;
+                    }
 
-            case R.id.profile:
-                Fragment currentFragmentprofile = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if(currentFragmentprofile instanceof ProfileFragment){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new ProfileFragment()).addToBackStack(null).commit();
+
+
                     break;
-                }
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ProfileFragment()).addToBackStack(null).commit();
-
-
-                break;
-
-            case R.id.notification:
-                Fragment currentFragmentNotification = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if(currentFragmentNotification instanceof NotificationFragment){
+                case R.id.notification:
+                    Fragment currentFragmentNotification = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (currentFragmentNotification instanceof NotificationFragment) {
+                        break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new NotificationFragment()).addToBackStack(null).commit();
                     break;
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new NotificationFragment()).addToBackStack(null).commit();
-                break;
 
-            case R.id.myCart:
-                Fragment currentFragmentMyCart = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if(currentFragmentMyCart instanceof MyCartFragment){
+                case R.id.myCart:
+                    Fragment currentFragmentMyCart = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (currentFragmentMyCart instanceof MyCartFragment) {
+                        break;
+                    } else {
+                        startActivity(new Intent(Home.this, MyCart.class));
+                    }
+
                     break;
-                }
 
-                break;
-
-            case R.id.myOrder:
-                Fragment currentFragmentMyOrder = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                if(currentFragmentMyOrder instanceof OrdersFragment){
+                case R.id.myOrder:
+                    Fragment currentFragmentMyOrder = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (currentFragmentMyOrder instanceof OrdersFragment) {
+                        break;
+                    }
                     break;
-                }
-                break;
 
-            case R.id.logout:
-                mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-                Intent i = new Intent(Home.this,Login.class);
-                startActivity(i);
-                finish();
-                break;
-        }
+                case R.id.logout:
+                    mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+                    Intent i = new Intent(Home.this, Login.class);
+                    startActivity(i);
+                    finish();
+                    break;
+            }
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return true;
 
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
@@ -260,10 +279,5 @@ public class Home<savedInstanceState> extends AppCompatActivity implements Navig
 
     }
 
-    public String getFileExtension(Uri uri){
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
 
 }

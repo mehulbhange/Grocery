@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BathingEssentials">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#43CDC1"
+        android:padding="5dp"
+        android:text="Bathing Essentials"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_dettol"
+                    android:layout_width="95dp"
+                    android:layout_height="95dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextTextMultiLine1"
+                    android:layout_width="82dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:text="DETTOL\nOriginal\nMRP:120(pack of 4) \nRs:100(pack of 4)"
+                    android:textSize="15dp" />
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/btn_dettol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Add to cart"
+                    android:textSize="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_dove"
+                    android:layout_width="95dp"
+                    android:layout_height="95dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextTextMultiLine2"
+                    android:layout_width="82dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:text="DOVE\nBeauty bathing bar\nMRP:140(pack of 4) \nRs:130(pack of 4)"
+                    android:textSize="15dp" />
+
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/btn_dove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="Add to cart"
+                    android:layout_gravity="center"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_cinthol"
+                    android:layout_width="95dp"
+                    android:layout_height="95dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextTextMultiLine3"
+                    android:layout_width="82dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:text="CINTHOL\nLime\nMRP:100(pack of 4) \nRs:85(pack of 4)"
+                    android:textSize="15dp" />
+
+                <Spinner
+                    android:id="@+id/spinner3"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/btn_cinthol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="Add to cart"
+                    android:layout_gravity="center"
+                    />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" />
+
+    <Button
+        android:id="@+id/btn_bathingessentials"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/background_color1"
+        android:layout_margin="4dp"
+        android:textSize="15sp"
+        android:text="GoToCart" />
+
+
+
+</LinearLayout>

@@ -101,5 +101,6 @@
     <string name="registration_fail">Something went wrong</string>
 
     <string name="user_name">User name</string>
+    <string name="textTitle">No Internet Connection</string>
 
 </resources>

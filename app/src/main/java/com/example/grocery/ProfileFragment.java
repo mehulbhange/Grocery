@@ -94,9 +94,8 @@ public class ProfileFragment extends Fragment {
         btn_back = (Button) view.findViewById(R.id.btn_back);
         navigationView = (NavigationView) view.findViewById(R.id.nav_view);
         iv_profileimage = (ImageView) view.findViewById(R.id.iv_profileimage);
-        System.out.println(iv_profileimage);
         iv_userimage = (ImageView)getActivity().findViewById(R.id.iv_userimage);
-        System.out.println(iv_userimage);
+
 
 
         storageReference = FirebaseStorage.getInstance().getReference();
